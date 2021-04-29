@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            id="RetrieveJDTErrors.commands.category"
+            name="Sample Category">
+      </category>
+      <command
+            categoryId="RetrieveJDTErrors.commands.category"
+            name="Sample Command"
+            id="RetrieveJDTErrors.commands.sampleCommand">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="retrievejdterrors.handlers.SampleHandler"
+            commandId="RetrieveJDTErrors.commands.sampleCommand">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="RetrieveJDTErrors.commands.sampleCommand"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            contextId="org.eclipse.ui.contexts.window"
+            sequence="M1+6">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            locationURI="menu:org.eclipse.ui.main.menu?after=additions">
+         <menu
+               id="RetrieveJDTErrors.menus.sampleMenu"
+               label="Sample Menu"
+               mnemonic="M">
+            <command
+                  commandId="RetrieveJDTErrors.commands.sampleCommand"
+                  id="RetrieveJDTErrors.menus.sampleCommand"
+                  mnemonic="S">
+            </command>
+         </menu>
+      </menuContribution>
+      <menuContribution
+            locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
+         <toolbar
+               id="RetrieveJDTErrors.toolbars.sampleToolbar">
+            <command
+                  id="RetrieveJDTErrors.toolbars.sampleCommand"
+                  commandId="RetrieveJDTErrors.commands.sampleCommand"
+                  icon="icons/sample.png"
+                  tooltip="Say hello world">
+            </command>
+         </toolbar>
+      </menuContribution>
+   </extension>
+
+</plugin>
