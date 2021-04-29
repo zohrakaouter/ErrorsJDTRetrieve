@@ -295,8 +295,9 @@ public class SampleHandler extends AbstractHandler {
 			    			         Document document = new Document(compilUnit.getSource());
 			    			         ImportDeclaration id1 = ast.newImportDeclaration();
 			    			         id1.setName(ast.newName(new String[] {"java", "util", "Set"}));
+			    			        // ((SimpleName)an).setIdentifier("newID");
 			    			         ASTRewrite rewriter1 = ASTRewrite.create(ast);
-			    			      
+			    			      rewriter1.set((SimpleName)an, SimpleName.IDENTIFIER_PROPERTY, "NEWID", null);
 			    			         ListRewrite lrw1 = rewriter1.getListRewrite(cu, CompilationUnit.IMPORTS_PROPERTY);
 			    			    
 			    			         lrw1.insertLast(id1, null);
