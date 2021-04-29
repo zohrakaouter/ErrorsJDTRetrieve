@@ -297,11 +297,34 @@ public class SampleHandler extends AbstractHandler {
 			    			         id1.setName(ast.newName(new String[] {"java", "util", "Set"}));
 			    			        // ((SimpleName)an).setIdentifier("newID");
 			    			         ASTRewrite rewriter1 = ASTRewrite.create(ast);
-			    			      rewriter1.set((SimpleName)an, SimpleName.IDENTIFIER_PROPERTY, "NEWID", null);
+			    			         
+			    			         rewriter1.set((SimpleName)an, SimpleName.IDENTIFIER_PROPERTY, "NEWID", null);
 			    			         ListRewrite lrw1 = rewriter1.getListRewrite(cu, CompilationUnit.IMPORTS_PROPERTY);
 			    			    
 			    			         lrw1.insertLast(id1, null);
-			    			   
+			    			         
+
+List<MethodDeclaration> methodDeclarations = MethodDeclarationFinder.perform(cu);
+for (MethodDeclaration methodDeclaration : methodDeclarations) {
+    MethodInvocation methodInvocation = ast.newMethodInvocation();
+
+     System.out.println("in METHOD DECLARATION ");
+    QualifiedName qName = ast.newQualifiedName(ast.newSimpleName("System"), ast.newSimpleName("out"));
+    methodInvocation.setExpression(qName);
+    methodInvocation.setName(ast.newSimpleName("println"));
+
+    StringLiteral literal = ast.newStringLiteral();
+    literal.setLiteralValue("Hello, World");
+    methodInvocation.arguments().add(literal);
+
+    // Append the statement DOES NOT WORK
+    methodDeclaration.getBody().statements().add(ast.newExpressionStatement(methodInvocation));
+    
+   
+}
+			    			         
+			    			         
+			    			         
 			    			         TextEdit edits = rewriter1.rewriteAST(document, null);
 			    			         edits.apply(document);
 			    			        
@@ -319,7 +342,7 @@ public class SampleHandler extends AbstractHandler {
 			    			        	 edit3.apply(documenti);  			    
 			    			        	 // write the changes from the buffer to the file 	
 			    			        	 textFileBuffer.commit(null /* ProgressMonitor */, false /* Overwrite */);
-			    			        	 System.out.println("rewriting ast 2"); 
+			    			        
 			    			        	 } 
 			    			         catch (MalformedTreeException e) { 	
 			    			        	 e.printStackTrace(); 			  
@@ -456,4 +479,26 @@ public class SampleHandler extends AbstractHandler {
 
 
 		   }
+	 public static final class MethodDeclarationFinder extends ASTVisitor {
+		  private final List <MethodDeclaration> methods = new ArrayList <> ();
+
+		  public static List<MethodDeclaration> perform(ASTNode node) {
+		      MethodDeclarationFinder finder = new MethodDeclarationFinder();
+		      node.accept(finder);
+		      return finder.getMethods();
+		  }
+
+		  @Override
+		  public boolean visit (final MethodDeclaration method) {
+		    methods.add (method);
+		    return super.visit(method);
+		  }
+
+		  /**
+		   * @return an immutable list view of the methods discovered by this visitor
+		   */
+		  public List <MethodDeclaration> getMethods() {
+		    return Collections.unmodifiableList(methods);
+		  }
+		}
 }
