@@ -317,9 +317,12 @@ for (MethodDeclaration methodDeclaration : methodDeclarations) {
     literal.setLiteralValue("Hello, World");
     methodInvocation.arguments().add(literal);
 
-    // Append the statement DOES NOT WORK
+    // Append the statement DOES NOT 
     methodDeclaration.getBody().statements().add(ast.newExpressionStatement(methodInvocation));
+    ListRewrite lrw2 = rewriter1.getListRewrite(cu, CompilationUnit.TYPES_PROPERTY);
     
+    lrw2.insertLast(methodInvocation, null);
+    System.out.println("OUT DECLARATION ");
    
 }
 			    			         
