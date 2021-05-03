@@ -93,7 +93,7 @@ import org.eclipse.jdt.core.dom.QualifiedName;
 import org.eclipse.jdt.core.dom.SimpleName;
 
 import org.eclipse.jdt.core.dom.SimpleType;
-
+import org.eclipse.jdt.core.dom.Statement;
 import org.eclipse.jdt.core.dom.StringLiteral;
 import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.rewrite.ASTRewrite;
@@ -250,13 +250,11 @@ public class SampleHandler extends AbstractHandler {
 
 			    			  ASTNode an=nf.getCoveringNode();
 
-			    			    
-
-			    			   
-
+			    			
 			    			     System.out.println(" ASTNode ERROR: "+an);
 
-			    			     
+			    			   
+				    			    
 
 			    			     /**  end method declaration **/
 
@@ -278,6 +276,9 @@ public class SampleHandler extends AbstractHandler {
 			    			         parser2.setSource(document2.get().toCharArray());
 			    			         CompilationUnit cu2 = (CompilationUnit) parser2.createAST(null);
 			    			         AST ast2 = cu2.getAST();
+			    			         
+			    			         ASTNode node = getStatement(an);
+			    			         
 			    			       
 			    			    	 ImportDeclaration id = ast2.newImportDeclaration();
 			    			         id.setName(ast2.newName(new String[] {"java", "util", "Set"}));
@@ -297,8 +298,9 @@ public class SampleHandler extends AbstractHandler {
 			    			         id1.setName(ast.newName(new String[] {"java", "util", "Set"}));
 			    			        // ((SimpleName)an).setIdentifier("newID");
 			    			         ASTRewrite rewriter1 = ASTRewrite.create(ast);
-			    			         
+			    			         rewriter1.remove(node, null);
 			    			         rewriter1.set((SimpleName)an, SimpleName.IDENTIFIER_PROPERTY, "NEWID", null);
+			    			         
 			    			         ListRewrite lrw1 = rewriter1.getListRewrite(cu, CompilationUnit.IMPORTS_PROPERTY);
 			    			    
 			    			         lrw1.insertLast(id1, null);
@@ -482,6 +484,20 @@ for (MethodDeclaration methodDeclaration : methodDeclarations) {
 
 
 		   }
+	 public ASTNode getStatement( ASTNode antmp)
+	 { 
+	  while( antmp!=null && !(antmp instanceof Statement))
+		  
+
+	    {
+		  antmp= antmp.getParent();
+	    }
+	  
+	  return antmp;
+
+	 }
+
+	 
 	 public static final class MethodDeclarationFinder extends ASTVisitor {
 		  private final List <MethodDeclaration> methods = new ArrayList <> ();
 
